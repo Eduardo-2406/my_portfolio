@@ -34,7 +34,7 @@ export const ScrollRevealSection = memo(function ScrollRevealSection({ children,
 
   // Forward visibility state to child components that accept `parentContentVisible`.
   const content = (isValidElement(children) && typeof children !== 'string')
-    ? cloneElement(children as React.ReactElement, { parentContentVisible: visible })
+    ? cloneElement(children as React.ReactElement<{ parentContentVisible?: boolean }>, { parentContentVisible: visible })
     : children;
 
   return (

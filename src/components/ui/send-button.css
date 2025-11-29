@@ -1,0 +1,335 @@
+.send-button-component {
+    --primary-color: hsl(var(--primary));
+    --text-color-light: hsl(var(--foreground));
+    --text-color-dark: hsl(var(--foreground));
+  
+    cursor: pointer;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background-color 0.3s ease;
+    width: clamp(140px, 40vw, 200px);
+    padding: clamp(9px, 2.2vw, 13px) clamp(18px, 4.2vw, 26px);
+    height: clamp(40px, 7.5vw, 52px);
+    font-family: inherit;
+    font-style: normal;
+    font-size: clamp(14px, 2.6vw, 16px);
+    font-weight: 500;
+    margin-top: 0.2rem;
+  }
+  
+  /* Light theme styles by default */
+  .send-button-component {
+    background-color: hsla(var(--primary) / 0.12);
+    color: var(--text-color-light);
+    border-color: hsla(var(--primary) / 0.3);
+  }
+  
+  .send-button-component:not(:disabled):hover {
+    background-color: hsla(var(--primary) / 0.12);
+  }
+  
+  /* Dark theme overrides: fondo fijo #599692, texto/iconos con color de títulos */
+  .dark .send-button-component {
+    background-color: #599692;
+    color: hsl(var(--foreground));
+    border-color: transparent;
+  }
+  
+  .dark .send-button-component:not(:disabled):hover {
+    background-color: #599692;
+  }
+  
+  
+  .send-button-component:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  .send-button-component:active {
+    transform: scale(0.98);
+  }
+  
+  .state p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .state .icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .state .icon svg {
+    overflow: visible;
+  }
+  
+  .state p span {
+    display: block;
+    opacity: 0;
+    animation: slideDown 0.8s ease forwards calc(var(--i) * 0.03s);
+  }
+  
+  .send-button-component:not(:disabled):hover p span {
+    opacity: 1;
+    animation: wave 0.5s ease forwards calc(var(--i) * 0.02s);
+  }
+  
+  .send-button-component.is-sending .state--default p span {
+    opacity: 1;
+    animation: disapear 0.6s ease forwards calc(var(--i) * 0.03s);
+  }
+  
+  @keyframes wave {
+    30% {
+      opacity: 1;
+      transform: translateY(4px) translateX(0) rotate(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-3px) translateX(0) rotate(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) translateX(0) rotate(0);
+    }
+  }
+  body:not(.dark) .send-button-component:not(:disabled):hover p span {
+    color: var(--text-color-light);
+  }
+  .dark .send-button-component:not(:disabled):hover p span {
+    color: var(--primary-color);
+  }
+  
+  @keyframes slideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px) translateX(5px) rotate(-90deg);
+      filter: blur(5px);
+    }
+    30% {
+      opacity: 1;
+      transform: translateY(4px) translateX(0) rotate(0);
+      filter: blur(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-3px) translateX(0) rotate(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) translateX(0) rotate(0);
+    }
+  }
+  
+  body:not(.dark) .state p span {
+    color: var(--text-color-light);
+  }
+  
+  .dark .state p span {
+    color: var(--text-color-dark);
+  }
+  
+  @keyframes disapear {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      transform: translateX(5px) translateY(20px);
+      filter: blur(5px);
+    }
+  }
+  
+  .state--default .icon svg {
+    animation: land 0.6s ease forwards;
+  }
+  
+  .send-button-component:not(:disabled):hover .state--default .icon {
+    transform: rotate(45deg) scale(1.25);
+  }
+  
+  .send-button-component.is-sending .state--default svg {
+    animation: takeOff 0.8s linear forwards;
+  }
+  
+  .send-button-component.is-sending .state--default .icon {
+    transform: rotate(0) scale(1.25);
+  }
+  
+  @keyframes takeOff {
+    0% {
+      opacity: 1;
+    }
+    60% {
+      opacity: 1;
+      transform: translateX(70px) rotate(45deg) scale(2);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(160px) rotate(45deg) scale(0);
+    }
+  }
+  
+  @keyframes land {
+    0% {
+      transform: translateX(-60px) translateY(30px) rotate(-50deg) scale(2);
+      opacity: 0;
+      filter: blur(3px);
+    }
+    100% {
+      transform: translateX(0) translateY(0) rotate(0);
+      opacity: 1;
+      filter: blur(0);
+    }
+  }
+  
+  .state--default .icon:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    height: 2px;
+    width: 0;
+    left: -5px;
+  }
+  
+  body:not(.dark) .state--default .icon:before {
+    background: linear-gradient(
+      to right,
+      transparent,
+      hsla(var(--muted-foreground) / 0.5)
+    );
+  }
+  
+  .dark .state--default .icon:before {
+    background: linear-gradient(
+      to right,
+      transparent,
+      hsla(var(--primary-foreground) / 0.5)
+    );
+  }
+  
+  .send-button-component.is-sending .state--default .icon:before {
+    animation: contrail 0.8s linear forwards;
+  }
+  
+  @keyframes contrail {
+    0% {
+      width: 0;
+      opacity: 1;
+    }
+    8% {
+      width: 15px;
+    }
+    60% {
+      opacity: 0.7;
+      width: 80px;
+    }
+    100% {
+      opacity: 0;
+      width: 160px;
+    }
+  }
+  
+  .state {
+    padding-left: 24px;
+    z-index: 2;
+    display: flex;
+    position: relative;
+  }
+  
+  .state--default {
+    display: flex;
+  }
+  
+  .send-button-component.is-sending .state--default {
+    animation: hideAfterTakeoff 0.8s forwards;
+    display: flex;
+    position: absolute;
+  }
+  
+  @keyframes hideAfterTakeoff {
+    0%,
+    99% {
+      opacity: 1;
+      visibility: visible;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  
+  .state--sent {
+    display: none;
+  }
+  
+  .send-button-component.is-sending .state--sent {
+    display: flex;
+    opacity: 0;
+    animation: showAfterTakeoff 0.1s 0.8s forwards;
+  }
+  
+  @keyframes showAfterTakeoff {
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .state--sent svg {
+    transform: scale(1.1);
+    margin-right: 6px;
+  }
+  
+  .send-button-component.is-sending .state--sent span {
+    opacity: 0;
+    animation: slideDown 0.8s ease forwards calc(var(--i) * 0.2s);
+  }
+  
+  .send-button-component.is-sending .state--sent .icon svg {
+    opacity: 0;
+    animation: appear 1.2s ease forwards 0.8s;
+  }
+  
+  @keyframes appear {
+    0% {
+      opacity: 0;
+      transform: scale(4) rotate(-40deg);
+      filter: blur(4px);
+    }
+    30% {
+      opacity: 1;
+      transform: scale(0.6);
+      filter: blur(1px);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+      filter: blur(0);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  body:not(.dark) .send-button-component.is-sending .state--sent .icon svg {
+    color: var(--text-color-light);
+  }
+  
+  .dark .send-button-component.is-sending .state--sent .icon svg {
+    color: var(--text-color-dark);
+  }
+  

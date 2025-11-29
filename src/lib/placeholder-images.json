@@ -1,0 +1,22 @@
+{
+    "placeholderImages": [
+      {
+        "id": "project1",
+        "description": "Inventory System Project",
+        "imageUrl": "/projects/web_sistema_inventario.webp",
+        "imageHint": "software system"
+      },
+      {
+        "id": "project2",
+        "description": "Web Cafe Project",
+        "imageUrl": "/projects/web_cafeteria.webp",
+        "imageHint": "cafe website"
+      },
+      {
+        "id": "project3",
+        "description": "Cybersecurity Platform Project",
+        "imageUrl": "/projects/web_ciberseguridad.webp",
+        "imageHint": "cybersecurity platform"
+      }
+    ]
+  }

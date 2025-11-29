@@ -1,0 +1,323 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* HTML & Scroll */
+  html {
+    overflow-x: hidden;
+    /* Ocultar barras de scroll en navegadores modernos */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE y Edge Legacy */
+  }
+
+  html::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  /* Desktop: sin scroll-behavior (navegación por secciones) */
+  @media (min-width: 1280px) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* Móviles/tablets: scroll nativo suave y asegurar comportamiento táctil */
+  @media (max-width: 1279px) {
+    html {
+      scroll-behavior: smooth;
+      overflow-y: auto;
+      touch-action: pan-y;
+      height: auto;
+      min-height: 100%;
+    }
+    
+    body {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: auto;
+      min-height: 100%;
+      position: relative; /* Asegurar contexto de apilamiento */
+    }
+  }
+
+  /* CSS Variables - Light Theme (basado en #111827, #626c7d, #599692, #dfe5ec) */
+  :root {
+    /* Usamos como fondo principal un gris-azulado claro #dfe5ec para mantener un modo claro usable */
+    --background: 216 23% 89%; /* #DFE5EC */
+    /* Títulos y texto fuerte: un azul muy oscuro cercano a #111827 */
+    --foreground: 222 47% 16%; /* aprox #111827 */
+    /* Cards: ligeramente más claras que el fondo */
+    --card: 216 23% 96%;
+    --card-foreground: 222 47% 16%;
+    --popover: 216 23% 96%;
+    --popover-foreground: 222 47% 16%;
+    /* Acento primario: verde pastel #599692 */
+    --primary: 174 25% 48%;
+    --primary-foreground: 210 40% 98%;
+    /* Acento secundario: tono más claro del mismo verde */
+    --secondary: 174 25% 60%;
+    --secondary-foreground: 222 47% 16%;
+    /* Texto secundario: mismo color que el texto principal para unificar todo el copy */
+    --muted: 216 23% 94%;
+    --muted-foreground: 222 47% 16%;
+    /* Accent por defecto: verde pastel */
+    --accent: 174 25% 48%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 98%;
+    /* Bordes / separadores: gris suave cercano a #cbd5e1 */
+    --border: 214 32% 85%;
+    --input: 214 32% 85%;
+    --ring: 174 25% 48%;
+    /* Valores de chart y sidebar */
+    --chart-1: 174 25% 48%;
+    --chart-2: 219 12% 43%;
+    --chart-3: 222 47% 16%;
+    --chart-4: 216 23% 89%;
+    --chart-5: 210 40% 96%;
+    --sidebar-background: 216 23% 94%;
+    --sidebar-foreground: 222 47% 16%;
+    --sidebar-primary: 174 25% 48%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 219 12% 43%;
+    --sidebar-accent-foreground: 222 47% 16%;
+    --sidebar-border: 214 32% 85%;
+    --sidebar-ring: 174 25% 48%;
+  }
+
+  /* CSS Variables - Dark Theme (basado en #0d0f12, #c7cacc, #c91b68, #809fff) */
+  .dark {
+    /* Fondo principal oscuro: #0d0f12 */
+    --background: 222 19% 6%;
+    /* Texto principal y secundario: gris medio-claro #c7cacc */
+    --foreground: 210 6% 79%;
+    --muted-foreground: 210 6% 79%; /* igual a --foreground */
+    /* Cards: un poco más claras que el fondo, usando #111827 como surface elevada */
+    --card: 222 31% 13%; /* aprox #111827 */
+    --card-foreground: 210 6% 79%;
+    --popover: 222 31% 13%;
+    --popover-foreground: 210 6% 79%;
+    /* Acento primario: verde pastel #599692 (mismo tono que en tema claro) */
+    --primary: 174 25% 48%; /* ≈ #599692 */
+    --primary-foreground: 222 19% 6%;
+    /* Acento secundario / hover: variante más clara del mismo verde */
+    --secondary: 174 25% 60%;
+    --secondary-foreground: 222 19% 6%;
+    /* Texto secundario: mismo color de texto para unificar todo el copy */
+    --muted: 222 24% 16%;
+    --muted-foreground: 210 6% 79%;
+    /* Accent por defecto: mismo verde primario */
+    --accent: 174 25% 48%;
+    --accent-foreground: 222 19% 6%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 98%;
+    /* Bordes / inputs oscuros derivados del fondo */
+    --border: 222 24% 16%;
+    --input: 222 24% 16%;
+    --ring: 174 25% 48%;
+  }
+
+  /* Global Border Color */
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  /* Body Styles */
+  body {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    color: hsl(var(--foreground));
+    /* Fondo claro basado en #dfe5ec con efecto suave tipo blur */
+    background-color: #DFE5EC;
+    background-image:
+      radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.18) 0%, transparent 45%),
+      radial-gradient(circle at 100% 0%, hsl(var(--primary)/ 0.18) 0%, transparent 45%),
+      radial-gradient(circle at 0% 100%, #e4e4e4 0%, transparent 45%),
+      radial-gradient(circle at 100% 100%, #e4e4e4 0%, transparent 45%);
+    background-attachment: fixed;
+  }
+
+  @media (max-width: 1279px) {
+    body {
+      background-attachment: scroll;
+    }
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dark body {
+    /* Fondo oscuro basado en #0d0f12 con acentos ligeramente azulados */
+    background-color: #0d0f12;
+    background-image:
+      radial-gradient(circle at 0% 0%, #111827 0%, transparent 55%),
+      radial-gradient(circle at 100% 0%, #111827 0%, transparent 55%),
+      radial-gradient(circle at 0% 100%, #020617 0%, transparent 55%),
+      radial-gradient(circle at 100% 100%, #020617 0%, transparent 55%);
+    background-attachment: fixed;
+  }
+
+  /* Selection Styles */
+  ::selection {
+    background-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
+  .dark ::selection {
+    background-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
+  /* Hamburger Menu Styles */
+  .hamburger,
+  .swap {
+    cursor: pointer;
+  }
+
+  .hamburger input {
+    display: none;
+  }
+
+  .hamburger svg {
+    height: 2.25em;
+    transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hamburger .line {
+    fill: none;
+    stroke: hsl(var(--foreground));
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.5;
+    transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+                stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hamburger .line-top-bottom {
+    stroke-dasharray: 12 63;
+  }
+
+  .hamburger input:checked + svg {
+    transform: rotate(-45deg);
+  }
+
+  .hamburger input:checked + svg .line-top-bottom {
+    stroke-dasharray: 20 300;
+    stroke-dashoffset: -32.42;
+  }
+
+  /* Code Cube Face Styles */
+  .code-cube-face pre {
+    font-family: monospace;
+    font-size: 9px;
+    line-height: 1.25;
+    text-align: left;
+    background-color: #1E1E1E;
+    color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    overflow: hidden;
+  }
+
+  .code-cube-face .token-tag {
+    color: #569CD6;
+  }
+
+  .code-cube-face .token-attr-name {
+    color: #9CDCFE;
+  }
+
+  .code-cube-face .token-attr-value {
+    color: #CE9178;
+  }
+
+  .code-cube-face .token-punctuation {
+    color: #ffffff;
+  }
+
+  .code-cube-face .token-selector {
+    color: #D7BA7D;
+  }
+
+  .code-cube-face .token-property {
+    color: #9CDCFE;
+  }
+
+  .code-cube-face .token-function {
+    color: #DCDCAA;
+  }
+
+  .code-cube-face .token-keyword {
+    color: #C586C0;
+  }
+
+  .code-cube-face .token-comment {
+    color: rgb(34 197 94); /* green-500 */
+  }
+}
+
+@layer utilities {
+    .animate-pulse-slow {
+      animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+      50% {
+        opacity: .5;
+      }
+    }
+    .swap {
+        @apply relative inline-grid select-none;
+        place-content: center;
+    }
+    .swap > * {
+        @apply col-start-1 row-start-1;
+    }
+    .swap input {
+        @apply absolute appearance-none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+    .swap .swap-on,
+    .swap .swap-off {
+        @apply transition-transform duration-300 ease-in-out;
+    }
+
+    .swap .swap-off {
+        transform-origin: 50% 50%;
+    }
+    .swap input:not(:checked) + .swap-on {
+        @apply opacity-0 -rotate-45;
+    }
+    .swap input:checked + .swap-on {
+        @apply opacity-100 rotate-0;
+    }
+
+    .swap input:checked ~ .swap-off {
+      @apply opacity-0 rotate-45;
+    }
+    
+    .swap-rotate input:not(:checked) + .swap-on {
+      transform: rotate(45deg);
+    }
+    
+    .animate-text-gradient {
+      background: linear-gradient(
+        -45deg,
+        hsl(var(--accent)),
+        hsl(var(--primary)),
+        hsl(var(--accent))
+      );
+      background-size: 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: text-gradient 8s ease-in-out infinite;
+    }
+
+    /* Keyframes definidos en tailwind.config.ts */
+}

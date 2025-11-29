@@ -1,0 +1,90 @@
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.loader {
+  position: relative;
+  width: 11.25rem; /* 180px */
+  height: 5rem; /* 80px */
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.loader span {
+  display: block;
+  width: 0.375rem; /* 6px */
+  height: 18%;
+  border-radius: 999px;
+  /* Tema claro: barras más oscuras, tema oscuro se invierte abajo */
+  background: linear-gradient(
+    180deg,
+    hsla(var(--primary) / 0.95),
+    hsla(var(--primary) / 0.45)
+  );
+  box-shadow:
+    0 0 0 hsla(var(--primary) / 0),
+    0 0 0 hsla(var(--accent) / 0);
+  transform-origin: 50% 100%;
+  animation: loaderWave 1.6s ease-in-out infinite;
+}
+
+/* Tema oscuro: invertir colores, barras claras sobre fondo oscuro */
+.dark .loader span {
+  background: linear-gradient(
+    180deg,
+    hsla(var(--primary) / 0.9),
+    hsla(var(--primary) / 0.5)
+  );
+}
+
+/* Desfase suave entre barras para crear una onda fluida */
+.loader span:nth-child(1)  { animation-delay: 0s;    height: 26%; }
+.loader span:nth-child(2)  { animation-delay: 0.05s; height: 32%; }
+.loader span:nth-child(3)  { animation-delay: 0.10s; height: 38%; }
+.loader span:nth-child(4)  { animation-delay: 0.15s; height: 46%; }
+.loader span:nth-child(5)  { animation-delay: 0.20s; height: 54%; }
+.loader span:nth-child(6)  { animation-delay: 0.25s; height: 62%; }
+.loader span:nth-child(7)  { animation-delay: 0.30s; height: 70%; }
+.loader span:nth-child(8)  { animation-delay: 0.35s; height: 76%; }
+.loader span:nth-child(9)  { animation-delay: 0.40s; height: 70%; }
+.loader span:nth-child(10) { animation-delay: 0.45s; height: 62%; }
+.loader span:nth-child(11) { animation-delay: 0.50s; height: 54%; }
+.loader span:nth-child(12) { animation-delay: 0.55s; height: 46%; }
+.loader span:nth-child(13) { animation-delay: 0.60s; height: 38%; }
+.loader span:nth-child(14) { animation-delay: 0.65s; height: 32%; }
+.loader span:nth-child(15) { animation-delay: 0.70s; height: 26%; }
+
+@keyframes loaderWave {
+  0% {
+    transform: translateY(0) scaleY(0.5);
+    opacity: 0.5;
+    box-shadow:
+      0 0 0 hsla(var(--primary) / 0),
+      0 0 0 hsla(var(--accent) / 0);
+  }
+  35% {
+    transform: translateY(-0.375rem) scaleY(1); /* -6px */
+    opacity: 1;
+    box-shadow:
+      0 0.5rem 1.125rem hsla(var(--primary) / 0.45), /* 0 8px 18px */
+      0 -0.25rem 0.75rem hsla(var(--accent) / 0.32); /* 0 -4px 12px */
+  }
+  70% {
+    transform: translateY(0) scaleY(0.7);
+    opacity: 0.85;
+    box-shadow:
+      0 0.25rem 0.625rem hsla(var(--primary) / 0.32), /* 0 4px 10px */
+      0 -0.125rem 0.5rem hsla(var(--accent) / 0.24); /* 0 -2px 8px */
+  }
+  100% {
+    transform: translateY(0) scaleY(0.5);
+    opacity: 0.5;
+    box-shadow:
+      0 0 0 hsla(var(--primary) / 0),
+      0 0 0 hsla(var(--accent) / 0);
+  }
+}

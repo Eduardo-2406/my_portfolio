@@ -123,42 +123,58 @@ export const SkillsSection = memo(function SkillsSection({ parentContentVisible 
   // removed containerVariants (unused)
 
   // Sequence when parentContentVisible becomes true (desktop)
+  const [isMounted, setIsMounted] = React.useState(false);
+  const animationRef = React.useRef<boolean>(false);
+  
   React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (!isMounted) return;
+    
+    // Mark that we're starting a new animation sequence
+    animationRef.current = true;
+    
     (async () => {
       if (!parentContentVisible || isMobile) {
         // reset
-        await mainTitleControls.start('hidden');
-        await frontendHeaderControls.start('hidden');
-        await frontendCardsControls.start('hidden');
-        await backendHeaderControls.start('hidden');
-        await backendCardsControls.start('hidden');
+        if (animationRef.current) await mainTitleControls.start('hidden');
+        if (animationRef.current) await frontendHeaderControls.start('hidden');
+        if (animationRef.current) await frontendCardsControls.start('hidden');
+        if (animationRef.current) await backendHeaderControls.start('hidden');
+        if (animationRef.current) await backendCardsControls.start('hidden');
         return;
       }
 
       // 1) Main title
-      await mainTitleControls.start('visible');
+      if (animationRef.current) await mainTitleControls.start('visible');
 
       // 2) Frontend header (title + subtitle)
-      await frontendHeaderControls.start('visible');
+      if (animationRef.current) await frontendHeaderControls.start('visible');
       // allow frontend cards to start (cards themselves use parentVisible and entryDelay)
-      setFrontendCardsStart(true);
+      if (animationRef.current) setFrontendCardsStart(true);
       // wait until frontend cards complete before showing backend header
       const frontendCount = Math.max(0, frontendSkills.length);
       const lastFrontendDelay = (headerDuration + titleToCardsBase) + (Math.max(0, frontendCount - 1) * cardStagger);
       const frontendFinishMs = Math.ceil((lastFrontendDelay + cardDuration) * 1000 + 40);
-      await new Promise((r) => setTimeout(r, frontendFinishMs));
+      if (animationRef.current) await new Promise((r) => setTimeout(r, frontendFinishMs));
 
       // 4) Backend header
-      await backendHeaderControls.start('visible');
+      if (animationRef.current) await backendHeaderControls.start('visible');
 
       // allow backend cards to start
-      setBackendCardsStart(true);
+      if (animationRef.current) setBackendCardsStart(true);
       // wait a short moment to let header animation begin
-      await new Promise((r) => setTimeout(r, Math.ceil(headerDuration * 1000)));
+      if (animationRef.current) await new Promise((r) => setTimeout(r, Math.ceil(headerDuration * 1000)));
     })();
 
-    // include animation control instances in deps to satisfy hooks lint rule
-  }, [parentContentVisible, isMobile, frontendSkills.length, backendSkills.length, mainTitleControls, frontendHeaderControls, frontendCardsControls, backendHeaderControls, backendCardsControls]);
+    return () => {
+      // Cleanup: cancel ongoing animations
+      animationRef.current = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted, parentContentVisible, isMobile, frontendSkills.length, headerDuration, titleToCardsBase, cardStagger, cardDuration]);
 
   return (
     <section id="skills" className="w-full h-full flex flex-col items-center justify-center pt-8 pb-32 sm:pt-12 sm:pb-32 md:pt-16 md:pb-32 lg:pt-16 lg:pb-32 scroll-mt-16">

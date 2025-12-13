@@ -2,7 +2,7 @@
 
 ## Demo y configuración rápida
 
-Este proyecto es una plantilla profesional lista para desplegar y vender. Incluye:
+Este proyecto es una plantilla profesional lista para desplegar. Incluye:
 - Portafolio moderno con animaciones y diseño responsive.
 - Formulario de contacto funcional usando Resend.
 - Configuración fácil por variables de entorno.
@@ -65,20 +65,4 @@ from: "no-reply@tudominio.com"
 
 Puedes desplegar en Vercel, Netlify, o cualquier hosting compatible con Next.js.
 
----
 
-## Recomendaciones para venta
-
-- Incluye capturas de pantalla y una demo pública.
-- Documenta cualquier personalización extra en este README.
-- El comprador solo debe editar `.env` y los links en `src/lib/data.ts`.
-
----
-
-## Soporte
-
-Para dudas técnicas, consulta la documentación oficial de Next.js y Resend.
-
----
-
-¡Listo para vender y entregar!

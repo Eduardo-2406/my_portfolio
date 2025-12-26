@@ -59,7 +59,7 @@ export const SocialIcon = ({ platform, url, className, variant = 'footer' }: Soc
       case 'github': return 'GitHub';
       case 'linkedin': return 'LinkedIn';
       case 'whatsapp': return 'WhatsApp';
-      case 'cv': return 'Download CV';
+      case 'cv': return 'Descargar CV';
     }
   };
 

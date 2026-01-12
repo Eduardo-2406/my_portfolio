@@ -41,6 +41,11 @@ const technologies = [
 ];
 
 type SkillsSectionProps = {
+  isCompact?: boolean;
+  footerVisible?: boolean;
+  setBlockNavigation?: (value: boolean) => void;
+  navigate?: (index: number) => void;
+  currentSection?: number;
   parentContentVisible?: boolean;
   contentCanAnimate?: boolean;
 };

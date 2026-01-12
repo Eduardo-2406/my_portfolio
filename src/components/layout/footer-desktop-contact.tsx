@@ -51,7 +51,7 @@ export const DesktopContactFooter = memo(function DesktopContactFooter() {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.8, ease }}
             >
-              Desarrollador Frontend Jr. creando experiencias web modernas.
+              Analista de Sistemas Jr. enfocado en diseñar soluciones claras y funcionales.
             </motion.p>
           </motion.div>
 

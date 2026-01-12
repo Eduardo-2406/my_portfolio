@@ -47,7 +47,7 @@ export const Footer = memo(function Footer({ onNavigate }: FooterProps = {}) {
             className="space-y-6 md:space-y-4"
           >
             <motion.h3 initial={isMobile ? { opacity: 0, y: 18 } : undefined} whileInView={isMobile ? { opacity: 1, y: 0 } : undefined} viewport={isMobile ? { once: true, amount: 0.18 } : undefined} transition={{ duration: 0.38, delay: isMobile ? 0.08 : 0 }} className="text-lg font-bold font-headline text-foreground">Eduardo R.</motion.h3>
-            <motion.p initial={isMobile ? { opacity: 0, y: 18 } : undefined} whileInView={isMobile ? { opacity: 1, y: 0 } : undefined} viewport={isMobile ? { once: true, amount: 0.18 } : undefined} transition={{ duration: 0.38, delay: isMobile ? 0.14 : 0 }} className="text-xs text-foreground max-w-xs">Creando soluciones web pensadas desde la arquitectura hasta la última línea de código.</motion.p>
+            <motion.p initial={isMobile ? { opacity: 0, y: 18 } : undefined} whileInView={isMobile ? { opacity: 1, y: 0 } : undefined} viewport={isMobile ? { once: true, amount: 0.18 } : undefined} transition={{ duration: 0.38, delay: isMobile ? 0.14 : 0 }} className="text-xs text-foreground max-w-xs">Me gusta pensar en cómo debería funcionar un sistema antes de construirlo. Analizo flujos, defino reglas y valido que todo tenga sentido.</motion.p>
             <motion.p initial={isMobile ? { opacity: 0, y: 18 } : undefined} whileInView={isMobile ? { opacity: 1, y: 0 } : undefined} viewport={isMobile ? { once: true, amount: 0.18 } : undefined} transition={{ duration: 0.38, delay: isMobile ? 0.18 : 0 }} className="text-xs text-foreground/80">¿Tienes un proyecto en mente? ¡Hablemos!</motion.p>
           </motion.div>
 
@@ -99,11 +99,19 @@ export const Footer = memo(function Footer({ onNavigate }: FooterProps = {}) {
                   transition={{ duration: 0.32, delay: isMobile ? 0.24 + idx * 0.08 : 0 }}
                   whileHover={{ y: -3 }}
                   whileTap={{ scale: 0.98 }}
+                  className="lg:w-auto w-auto"
                 >
                   <SocialIcon 
                     platform={platform as SocialPlatform} 
                     url={socialLinks[platform]} 
-                    variant={typeof window !== 'undefined' && window.innerWidth < 1024 ? 'lateral' : undefined}
+                    variant="lateral"
+                    className="lg:hidden"
+                  />
+                  <SocialIcon 
+                    platform={platform as SocialPlatform} 
+                    url={socialLinks[platform]} 
+                    variant="footer"
+                    className="hidden lg:block"
                   />
                 </motion.li>
               ))}

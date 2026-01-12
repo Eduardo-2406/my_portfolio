@@ -1,259 +1,342 @@
 "use client";
 
-import React, { useMemo, memo, type ReactNode } from 'react';
-import { skills, type Skill } from '@/lib/data';
+import React, { memo } from 'react';
 import { TechIcon } from '../tech-icon';
-import { motion, cubicBezier, useAnimation } from 'framer-motion';
+import { motion, useAnimation, AnimatePresence } from 'framer-motion';
+import { wrap } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { CheckCircle2, Workflow, Bug, User, FolderTree, Shield, Database, Boxes, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const ease = cubicBezier(0.22, 1, 0.36, 1);
-const entranceEase = cubicBezier(0.25, 0.46, 0.45, 0.94);
-// hoverEase removed: icon hover now uses CSS transform transitions (Tailwind) instead of framer-motion ease
+const analysisSkills = [
+  { name: 'Análisis funcional', icon: CheckCircle2 },
+  { name: 'Definición de flujos de usuario', icon: Workflow },
+  { name: 'Validación de funcionalidades', icon: CheckCircle2 },
+  { name: 'Detección de errores lógicos', icon: Bug },
+  { name: 'Pensamiento orientado al usuario', icon: User },
+];
 
-// Categorización de habilidades (constante estática)
-const skillCategories: Record<'frontend'|'backend', string[]> = {
-  frontend: ['JavaScript', 'React', 'Next.js', 'Tailwind CSS', 'HTML5', 'CSS'],
-  backend: ['Node.js', 'Firebase', 'PostgreSQL', 'C#', 'SQL Server'],
-};
+const systemsDesignSkills = [
+  { name: 'Estructuración de proyectos', icon: FolderTree },
+  { name: 'Organización de carpetas', icon: FolderTree },
+  { name: 'Definición de roles y permisos', icon: Shield },
+  { name: 'Reglas de negocio', icon: Database },
+  { name: 'Arquitectura básica de aplicaciones', icon: Boxes },
+];
 
-const getSkillLevel = (level: number): string => {
-  if (level >= 50) return 'Intermedio';
-  if (level >= 30) return 'Básico+';
-  return 'Básico';
-};
-
-// helper removed: delays handled per-group via `groupDelay` passed to SkillCard
-
-const cardItemVariants = {
-  hidden: { opacity: 0, scale: 0 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: cubicBezier(0.34, 1.56, 0.64, 1) } },
-} as const;
-
-// containerVariants removed (unused)
-
-const headerContainerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.06, delayChildren: 0 } },
-} as const;
-
-const headerItemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: entranceEase } },
-} as const;
-
-const SkillCard = memo(function SkillCard({ name, level, parentVisible = false, entryDelay }: Skill & { parentVisible?: boolean } & { entryDelay?: number }) {
-  const levelLabel = getSkillLevel(level);
-  const isMobile = useIsMobile();
-  // groupDelay available for future tuning; not used directly here
-  return (
-    <motion.div
-      className="group relative"
-      initial={'hidden'}
-      variants={cardItemVariants}
-      animate={!isMobile ? (parentVisible ? 'visible' : 'hidden') : undefined}
-      transition={!isMobile && entryDelay !== undefined ? { delay: entryDelay, duration: 0.34, ease: cubicBezier(0.34, 1.56, 0.64, 1) } : undefined}
-      whileInView={isMobile ? 'visible' : undefined}
-      viewport={isMobile ? { once: true, amount: 0.18 } : undefined}
-      style={{ transformStyle: 'preserve-3d' }}
-    >
-      <div className="relative h-full rounded-lg border border-foreground/10 bg-card/50 p-3">
-        {/* Progress bar en el borde superior */}
-        <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-lg overflow-hidden bg-foreground/5">
-          <motion.div
-            className="h-full bg-gradient-to-r from-primary via-primary to-primary/70"
-            variants={{ hidden: { width: 0 }, visible: { width: `${level}%`, transition: { duration: 1.0, ease: entranceEase } } }}
-          />
-        </div>
-
-        {/* No hover beam: solo movimiento del icono en hover */}
-        
-        <div className="relative flex flex-col items-center gap-3 text-center group">
-          {/* Icono: animación activada al hacer hover en la card (clase group) */}
-          <div className="relative transform transition-transform duration-300 group-hover:-translate-y-1">
-            <TechIcon name={name} className="h-9 w-9 text-foreground transition-transform duration-300" />
-          </div>
-
-          {/* Nombre de la tecnología y badge: centrados y sin hover que afecte al layout */}
-          <div className="space-y-1 text-center py-1">
-            <h3 className={`font-semibold text-foreground transition-colors duration-200 ${name === 'Node.js' ? 'text-lg lg:text-xl' : 'text-base'}`}>{name}</h3>
-            <span className={`inline-block px-2 py-0.5 ${levelLabel === 'Básico' ? 'text-sm' : 'text-[10px]'} font-medium rounded-md bg-foreground/5 text-foreground/60`}>{levelLabel}</span>
-          </div>
-        </div>
-
-        {/* Decorative bottom line removed to avoid persistent 'glow' look */}
-      </div>
-    </motion.div>
-  );
-});
+const technologies = [
+  { name: 'HTML5' },
+  { name: 'CSS' },
+  { name: 'JavaScript' },
+  { name: 'TypeScript' },
+  { name: 'React' },
+  { name: 'Next.js' },
+  { name: 'Tailwind CSS' },
+  { name: 'Firebase' },
+  { name: 'SQL Server' },
+  { name: 'C#' },
+  { name: 'PostgreSQL' },
+  { name: 'MySQL' },
+  { name: 'Git' },
+  { name: 'GitHub' },
+];
 
 type SkillsSectionProps = {
-  children?: ReactNode;
-  isCompact?: boolean;
-  footerVisible?: boolean;
-  setBlockNavigation?: (value: boolean) => void;
-  navigate?: (index: number) => void;
-  currentSection?: number;
   parentContentVisible?: boolean;
   contentCanAnimate?: boolean;
 };
 
+// Item de lista simple para habilidades
+const SkillListItem = memo(function SkillListItem({ 
+  name, 
+  icon: Icon, 
+  index
+}: { 
+  name: string; 
+  icon: React.ComponentType<{ className?: string }>; 
+  index: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -10 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.1 + (index * 0.05), duration: 0.4 }}
+      className="flex items-center gap-3 p-3 rounded-xl hover:bg-foreground/5 transition-colors group"
+    >
+      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+        <Icon className="w-5 h-5" />
+      </div>
+      <p className="text-base sm:text-lg text-foreground/90 font-medium leading-tight">{name}</p>
+    </motion.div>
+  );
+});
+
+// Item simple para tecnologías
+const TechItem = memo(function TechItem({ 
+  name 
+}: { 
+  name: string; 
+}) {
+  return (
+    <div className="flex flex-col items-center gap-2 group p-2 rounded-xl transition-colors duration-300">
+      <div className="p-3 rounded-2xl bg-foreground/5 group-hover:bg-foreground/10 transition-colors duration-300 backdrop-blur-sm shadow-sm">
+        <TechIcon name={name as import('../tech-icon').TechName} className="h-8 w-8 text-foreground/80 group-hover:text-foreground transition-all duration-300 group-hover:scale-110" />
+      </div>
+      <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center">{name}</span>
+    </div>
+  );
+});
+
+const carouselVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 50 : -50,
+    opacity: 0,
+    scale: 0.98
+  }),
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1,
+    scale: 1
+  },
+  exit: (direction: number) => ({
+    zIndex: 0,
+    x: direction < 0 ? 50 : -50,
+    opacity: 0,
+    scale: 0.98
+  })
+};
+
+const swipeConfidenceThreshold = 10000;
+const swipePower = (offset: number, velocity: number) => {
+  return Math.abs(offset) * velocity;
+};
+
 export const SkillsSection = memo(function SkillsSection({ parentContentVisible }: SkillsSectionProps) {
-  // Organizar skills por categoría (skills es un import estático)
-  const frontendSkills = useMemo(() => skills.filter(skill => skillCategories.frontend.includes(skill.name as string)), []);
-  const backendSkills = useMemo(() => skills.filter(skill => skillCategories.backend.includes(skill.name as string)), []);
-
-  // (Removed old timeout-based states — sequencing handled with animation controls below)
-
-  // Controls and sequence using framer-motion's useAnimation so we can replicate
-  // the portfolio desktop sequencing: title -> frontend header/sub -> frontend cards -> backend header/sub -> backend cards
   const isMobile = useIsMobile();
   const mainTitleControls = useAnimation();
-  const frontendHeaderControls = useAnimation();
-  const frontendCardsControls = useAnimation();
-  const backendHeaderControls = useAnimation();
-  const backendCardsControls = useAnimation();
-  const [frontendCardsStart, setFrontendCardsStart] = React.useState(false);
-  const [backendCardsStart, setBackendCardsStart] = React.useState(false);
-  // timing constants (sharply reduced for snappier entry)
-  const headerDuration = 0.18; // duration used for headerItemVariants
-  const cardDuration = 0.34; // duration for card entry
-  const cardStagger = 0.035; // per-card stagger
-  const titleToCardsBase = 0.04; // base delay between header and first card
+  
+  // Carousel State
+  const [[page, direction], setPage] = React.useState([0, 0]);
+  const slidesCount = 3;
+  const slideIndex = wrap(0, slidesCount, page);
 
-  // removed containerVariants (unused)
-
-  // Sequence when parentContentVisible becomes true (desktop)
   const [isMounted, setIsMounted] = React.useState(false);
   const animationRef = React.useRef<boolean>(false);
-  
+  const autoplayRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  // Define autoplay functions before useEffect
+  const startAutoplay = React.useCallback(() => {
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+    autoplayRef.current = setInterval(() => {
+      setPage(prev => [prev[0] + 1, 1]);
+    }, 12000); // 12 seconds
+  }, []);
+
+  const stopAutoplay = React.useCallback(() => {
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+  }, []);
+
+  const resetAutoplay = React.useCallback(() => {
+    stopAutoplay();
+    startAutoplay();
+  }, [stopAutoplay, startAutoplay]);
+
   React.useEffect(() => {
     setIsMounted(true);
-  }, []);
+    if (!isMobile) {
+      startAutoplay();
+    }
+    return () => stopAutoplay();
+  }, [isMobile, startAutoplay, stopAutoplay]);
+
+  const paginate = React.useCallback((newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
+    resetAutoplay();
+  }, [page, resetAutoplay]);
 
   React.useEffect(() => {
     if (!isMounted) return;
-    
-    // Mark that we're starting a new animation sequence
     animationRef.current = true;
-    
     (async () => {
       if (!parentContentVisible || isMobile) {
-        // reset
         if (animationRef.current) await mainTitleControls.start('hidden');
-        if (animationRef.current) await frontendHeaderControls.start('hidden');
-        if (animationRef.current) await frontendCardsControls.start('hidden');
-        if (animationRef.current) await backendHeaderControls.start('hidden');
-        if (animationRef.current) await backendCardsControls.start('hidden');
         return;
       }
-
-      // 1) Main title
       if (animationRef.current) await mainTitleControls.start('visible');
-
-      // 2) Frontend header (title + subtitle)
-      if (animationRef.current) await frontendHeaderControls.start('visible');
-      // allow frontend cards to start (cards themselves use parentVisible and entryDelay)
-      if (animationRef.current) setFrontendCardsStart(true);
-      // wait until frontend cards complete before showing backend header
-      const frontendCount = Math.max(0, frontendSkills.length);
-      const lastFrontendDelay = (headerDuration + titleToCardsBase) + (Math.max(0, frontendCount - 1) * cardStagger);
-      const frontendFinishMs = Math.ceil((lastFrontendDelay + cardDuration) * 1000 + 40);
-      if (animationRef.current) await new Promise((r) => setTimeout(r, frontendFinishMs));
-
-      // 4) Backend header
-      if (animationRef.current) await backendHeaderControls.start('visible');
-
-      // allow backend cards to start
-      if (animationRef.current) setBackendCardsStart(true);
-      // wait a short moment to let header animation begin
-      if (animationRef.current) await new Promise((r) => setTimeout(r, Math.ceil(headerDuration * 1000)));
     })();
+    return () => { animationRef.current = false; };
+  }, [isMounted, parentContentVisible, isMobile, mainTitleControls]);
 
-    return () => {
-      // Cleanup: cancel ongoing animations
-      animationRef.current = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMounted, parentContentVisible, isMobile, frontendSkills.length, headerDuration, titleToCardsBase, cardStagger, cardDuration]);
+  // Slides Content
+  const renderAnalysisSlide = () => (
+    <div className="w-full h-full flex flex-col justify-center items-start max-w-4xl mx-auto">
+      <div className="flex items-center gap-4 mb-8">
+        <div className="p-3 bg-primary/10 rounded-2xl text-primary">
+          <CheckCircle2 className="w-8 h-8" />
+        </div>
+        <div>
+          <h3 className="text-3xl font-bold text-foreground">Análisis y QA</h3>
+          <p className="text-muted-foreground text-lg">Enfoque en validación y experiencia de usuario</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 px-4 md:px-12 w-full">
+        {analysisSkills.map((skill, idx) => (
+          <SkillListItem key={skill.name} name={skill.name} icon={skill.icon} index={idx} />
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderDesignSlide = () => (
+    <div className="w-full h-full flex flex-col justify-center items-start max-w-4xl mx-auto">
+      <div className="flex items-center gap-4 mb-8">
+        <div className="p-3 bg-primary/10 rounded-2xl text-primary">
+          <FolderTree className="w-8 h-8" />
+        </div>
+        <div>
+          <h3 className="text-3xl font-bold text-foreground">Diseño de Sistemas</h3>
+          <p className="text-muted-foreground text-lg">Estructura y organización de proyectos</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 px-4 md:px-12 w-full">
+        {systemsDesignSkills.map((skill, idx) => (
+          <SkillListItem key={skill.name} name={skill.name} icon={skill.icon} index={idx} />
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderTechSlide = () => (
+    <div className="w-full h-full flex flex-col justify-center items-start max-w-5xl mx-auto">
+      <div className="flex items-center gap-4 mb-8">
+        <div className="p-3 bg-primary/10 rounded-2xl text-primary">
+          <Database className="w-8 h-8" />
+        </div>
+        <div>
+          <h3 className="text-3xl font-bold text-foreground">Tecnologías Utilizadas</h3>
+          <p className="text-muted-foreground text-lg">Stack técnico en proyectos académicos</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6 px-4 w-full justify-items-center">
+        {technologies.map((tech) => (
+          <TechItem key={tech.name} name={tech.name} />
+        ))}
+      </div>
+    </div>
+  );
+
+  const slides = [renderAnalysisSlide, renderDesignSlide, renderTechSlide];
 
   return (
-    <section id="skills" className="w-full h-full flex flex-col items-center justify-center pt-8 pb-32 sm:pt-12 sm:pb-32 md:pt-16 md:pb-32 lg:pt-16 lg:pb-32 scroll-mt-16">
-      <div className="w-full px-4 sm:px-8 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        {/* Título principal */}
-        <motion.div className="flex flex-col items-center justify-center space-y-1 text-center mb-12 sm:mb-16 max-w-4xl mx-auto">
+    <section id="skills" className="w-full min-h-screen sm:min-h-0 flex flex-col items-center justify-center pt-8 pb-20 sm:pt-16 sm:pb-32 scroll-mt-16 overflow-hidden">
+      <div className="w-full px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
+        
+        {/* Título */}
+        <motion.div className="flex flex-col items-center justify-center space-y-1 text-center mb-12 sm:mb-16">
           <motion.div style={{ overflow: 'hidden' }}>
             <motion.h2
-              style={{ fontSize: 'clamp(1.875rem, 5vw, 3.125rem)' }}
+              style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
               className="font-bold tracking-tighter font-headline text-foreground z-20"
               initial={{ y: '100%', opacity: 0 }}
-              variants={{ hidden: { y: '100%', opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease } } }}
               animate={!isMobile ? mainTitleControls : undefined}
               whileInView={isMobile ? { y: 0, opacity: 1 } : undefined}
-              viewport={isMobile ? { once: true, amount: 0.18 } : undefined}
+              viewport={isMobile ? { once: true, amount: 0.3 } : undefined}
+              variants={{ hidden: { y: '100%', opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } } }}
             >
               Habilidades
             </motion.h2>
           </motion.div>
         </motion.div>
 
-        <div className="max-w-7xl mx-auto space-y-12 lg:space-y-16">
-          {/* Frontend Section */}
-          <div>
-            <div className="mb-6">
-                <motion.div
-                  initial="hidden"
-                  variants={headerContainerVariants}
-                  animate={!isMobile ? frontendHeaderControls : undefined}
-                  whileInView={isMobile ? 'visible' : undefined}
-                  viewport={isMobile ? { once: true, amount: 0.18 } : undefined}
-                >
-                  <motion.div className="text-2xl lg:text-3xl font-bold text-foreground mb-2 flex items-center gap-3" variants={headerItemVariants}>
-                    <span className="inline-block w-1 h-6 bg-gradient-to-b from-primary to-primary/50 rounded-full" />
-                    Frontend Development
-                  </motion.div>
-                  <motion.div className="text-base lg:text-lg text-muted-foreground ml-7" variants={headerItemVariants} transition={{ duration: 0.38, delay: 0.06, ease }}>
-                    Diseño y desarrollo de interfaces de usuario
-                  </motion.div>
-                </motion.div>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 lg:gap-6">
-              {frontendSkills.map((skill, idx) => (
-                  // entryDelay: base + idx*stagger (base chosen to follow header timing)
-                  <SkillCard key={skill.name} {...skill} parentVisible={frontendCardsStart} entryDelay={(headerDuration + titleToCardsBase) + idx * cardStagger} />
-                ))}
-            </div>
-          </div>
-
-          {/* Backend Section */}
-          <div>
-            <div className="mb-6">
-              <motion.div
-                initial="hidden"
-                variants={headerContainerVariants}
-                animate={!isMobile ? backendHeaderControls : undefined}
-                whileInView={isMobile ? 'visible' : undefined}
-                viewport={isMobile ? { once: true, amount: 0.18 } : undefined}
+        {isMobile ? (
+          /* Mobile: Vertical Stack */
+          <div className="flex flex-col gap-8 pb-12">
+            {[renderAnalysisSlide(), renderDesignSlide(), renderTechSlide()].map((content, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="bg-secondary/10 backdrop-blur-sm rounded-3xl p-6 border border-foreground/5 shadow-sm"
               >
-                <motion.div className="text-2xl lg:text-3xl font-bold text-foreground mb-2 flex items-center gap-3" variants={headerItemVariants} transition={{ duration: 0.36, delay: 0.06 }}>
-                  <span className="inline-block w-1 h-6 bg-gradient-to-b from-primary to-primary/50 rounded-full" />
-                  Backend & Database
-                </motion.div>
-                <motion.div className="text-base lg:text-lg text-muted-foreground ml-7" variants={headerItemVariants} transition={{ duration: 0.38, delay: 0.08 }}
-                  whileInView={isMobile ? 'visible' : undefined}
-                  viewport={isMobile ? { once: true, amount: 0.18 } : undefined}
-                >
-                  Servidores, APIs y gestión de datos
-                </motion.div>
+                {content}
               </motion.div>
+            ))}
+          </div>
+        ) : (
+          /* Desktop: Carousel */
+          <div className="relative w-full max-w-5xl mx-auto h-[480px] flex items-center justify-center">
+            
+            {/* Main Content Area */}
+            <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-3xl bg-secondary/10 backdrop-blur-md border border-foreground/5 shadow-xl">
+              <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                <motion.div
+                  key={page}
+                  custom={direction}
+                  variants={carouselVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 }
+                  }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(e, { offset, velocity }) => {
+                    const swipe = swipePower(offset.x, velocity.x);
+                    if (swipe < -swipeConfidenceThreshold) paginate(1);
+                    else if (swipe > swipeConfidenceThreshold) paginate(-1);
+                  }}
+                  className="absolute w-full h-full flex items-center justify-center p-8 sm:p-12 cursor-grab active:cursor-grabbing"
+                >
+                  {slides[slideIndex]()}
+                </motion.div>
+              </AnimatePresence>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-6">
-              {backendSkills.map((skill, idx) => (
-                // backend entryDelay base later than frontend (to keep sequence)
-                <SkillCard key={skill.name} {...skill} parentVisible={backendCardsStart} entryDelay={(headerDuration + titleToCardsBase) + (frontendSkills.length * cardStagger) + idx * cardStagger} />
+
+            {/* Navigation Buttons */}
+            <div className="absolute inset-y-0 left-[-60px] flex items-center justify-center z-10 w-16">
+              <button
+                className="p-3 rounded-full bg-secondary/20 hover:bg-secondary/40 text-foreground transition-all transform hover:scale-110 backdrop-blur-sm shadow-lg border border-foreground/5"
+                onClick={() => paginate(-1)}
+              >
+                <ChevronLeft className="w-8 h-8" />
+              </button>
+            </div>
+            <div className="absolute inset-y-0 right-[-60px] flex items-center justify-center z-10 w-16">
+              <button
+                className="p-3 rounded-full bg-secondary/20 hover:bg-secondary/40 text-foreground transition-all transform hover:scale-110 backdrop-blur-sm shadow-lg border border-foreground/5"
+                onClick={() => paginate(1)}
+              >
+                <ChevronRight className="w-8 h-8" />
+              </button>
+            </div>
+
+            {/* Pagination Indicators */}
+            <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-3 z-10">
+              {slides.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    const newDir = idx > slideIndex ? 1 : -1;
+                    if (idx !== slideIndex) {
+                       setPage([page + (idx - slideIndex), newDir]);
+                       resetAutoplay();
+                    }
+                  }}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    idx === slideIndex ? 'bg-primary w-8' : 'bg-foreground/20 hover:bg-foreground/40 w-2'
+                  }`}
+                />
               ))}
             </div>
+
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

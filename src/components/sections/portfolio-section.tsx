@@ -280,29 +280,61 @@ const SplitViewCard = React.memo(function SplitViewCard({
       custom={0}
       style={{ pointerEvents: isActive ? 'auto' : 'none' }}
     >
-      {/* Columna izquierda - Imagen fija (sale desde abajo). Aplicar fade-in igual que footer-desktop */}
+      {/* Columna izquierda - Imagen con tecnologías en la parte inferior */}
       <motion.div
-        className="relative flex items-center justify-center overflow-hidden rounded-2xl border border-foreground/10 p-2 bg-[#CED7DE] dark:bg-[#141926]"
+        className="relative flex flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-[#CED7DE] dark:bg-[#141926]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.35, ease }}
       >
+        {/* Número de proyecto en esquina superior izquierda - Detrás de la imagen */}
+        <motion.div
+          className="absolute top-4 left-4 text-6xl lg:text-7xl font-bold text-foreground/10 select-none z-0"
+          variants={contentVariants}
+          style={{ pointerEvents: 'none' }}
+        >
+          {String(projects.findIndex(p => p.id === project.id) + 1).padStart(2, '0')}
+        </motion.div>
+
+        {/* Imagen */}
         {projectImage && (
-          <motion.div className="relative w-full h-full overflow-hidden" variants={imageVariants}>
-            <Image
-              src={projectImage.imageUrl}
-              alt={project.title}
-              data-ai-hint={projectImage.imageHint}
-              fill
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-contain"
-            />
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-transparent via-transparent to-transparent" />
+          <motion.div className="relative flex-1 overflow-hidden z-10" variants={imageVariants}>
+            <div className="relative w-full h-full">
+              <Image
+                src={projectImage.imageUrl}
+                alt={project.title}
+                data-ai-hint={projectImage.imageHint}
+                fill
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="object-contain object-bottom"
+              />
+            </div>
           </motion.div>
         )}
+
+        {/* Tecnologías en la parte inferior */}
+        <motion.div 
+          className="p-4 bg-card/95 backdrop-blur-sm border-t border-foreground/10 z-10 relative" 
+          variants={contentVariants}
+        >
+          <h4 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">Tecnologías Utilizadas</h4>
+          <div className="flex flex-wrap gap-1.5">
+            {project.tags.map((tag) => (
+              <motion.div key={tag} variants={badgeVariants}>
+                <Badge
+                  variant="outline"
+                  className="gap-1.5 border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors px-2 py-1"
+                >
+                  <TechIcon name={tag as TechName} className="h-3.5 w-3.5 text-primary" />
+                  <span className="text-xs font-medium text-foreground">{tag}</span>
+                </Badge>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </motion.div>
 
-      {/* Columna derecha - Información con animación orquestada */}
+      {/* Columna derecha - Información sin tecnologías */}
       <div className="relative flex flex-col justify-center overflow-hidden">
         <motion.div className="space-y-6" variants={containerVariants} custom={baseDelay}>
           {/* Título de la card: slide-up */}
@@ -313,29 +345,11 @@ const SplitViewCard = React.memo(function SplitViewCard({
             <div className="h-1 w-20 bg-gradient-to-r from-primary to-primary/50 rounded-full" />
           </motion.div>
 
-          {/* Contenido: título de la card y descripción salen left->right (title primero gracias al stagger) */}
+          {/* Descripción */}
           <motion.div variants={contentVariants}>
-            <motion.p className="text-base lg:text-lg text-muted-foreground leading-relaxed" variants={textLeftVariants}>
+            <motion.p className="text-base lg:text-lg text-muted-foreground leading-relaxed whitespace-pre-line" variants={textLeftVariants}>
               {project.description}
             </motion.p>
-          </motion.div>
-
-          {/* Tecnologías: badges con stagger */}
-          <motion.div className="space-y-3" variants={contentVariants}>
-            <h4 className="text-sm font-semibold text-foreground/70 uppercase tracking-wider">Tecnologías</h4>
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <motion.div key={tag} variants={badgeVariants}>
-                  <Badge
-                    variant="outline"
-                    className="gap-2 border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors px-3 py-1.5"
-                  >
-                    <TechIcon name={tag as TechName} className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium text-foreground">{tag}</span>
-                  </Badge>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
 
           {/* Botón CTA */}
@@ -530,19 +544,6 @@ export const PortfolioSection = memo(function PortfolioSection({ setBlockNavigat
                   </svg>
                 </button>
               </div>
-
-              {/* Número de proyecto en la esquina inferior izquierda */}
-              <motion.div
-                className="absolute bottom-0 left-0 text-8xl font-bold text-foreground/5 select-none"
-                key={activeIdx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                style={{ zIndex: 30, pointerEvents: 'none' }}
-              >
-                {String(activeIdx + 1).padStart(2, '0')}
-              </motion.div>
             </div>
           </div>
         )}

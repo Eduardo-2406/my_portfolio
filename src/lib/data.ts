@@ -20,7 +20,7 @@ export const projects: Project[] = [
     id: 'proj1',
     title: 'Sistema de Inventario Kolping',
     description:
-      'Proyecto académico de práctica profesional: plataforma de inventario diseñada para optimizar la gestión interna de la empresa Kolping, reducir errores derivados del manejo manual de información y ofrecer una visión más clara y confiable de sus operaciones.',
+      'Proyecto académico de práctica profesional\n\nSistema de inventario general desarrollado como práctica profesional, enfocado en digitalizar procesos que antes se manejaban en Excel. El sistema permite gestionar materiales, equipos, mobiliario, eventos y viajes desde una sola plataforma, con distintos niveles de acceso según el usuario.\n\nMi participación estuvo centrada en el análisis del funcionamiento interno, la definición de flujos, reglas de negocio y la lógica general del sistema.',
     image: 'project1',
     tags: ['C#', 'SQL Server'],
     liveUrl: '#',
@@ -30,7 +30,7 @@ export const projects: Project[] = [
     id: 'proj2',
     title: 'Cafetería Web',
     description:
-      'Proyecto académico de cafetería web que digitaliza pedidos y facturación: donde los clientes realizan sus pedidos en línea y reciben su factura en PDF por correo electrónico, mientras el personal administra y actualiza el estado de cada pedido desde un panel centralizado.',
+      'Proyecto académico\n\nSistema web para la gestión de pedidos y facturación de una cafetería. Los clientes pueden realizar pedidos en línea y recibir su factura en PDF por correo electrónico, mientras el personal administra y actualiza el estado de los pedidos desde un panel centralizado.\n\nEl proyecto se enfocó en definir flujos claros, validaciones y una experiencia sencilla tanto para clientes como para empleados.',
     image: 'project2',
     tags: ['PHP', 'Sass', 'JavaScript', 'MySQL'],
     liveUrl: '#',
@@ -40,10 +40,10 @@ export const projects: Project[] = [
     id: 'proj3',
     title: 'Plataforma de Ciberseguridad',
     description:
-      'Plataforma educativa de ciberseguridad desarrollada como proyecto de tesis para una empresa, enfocada en vulnerabilidades, fortalecer el conocimiento, la conciencia y la cultura de ciberseguridad de los empleados, ayudando a la empresa a reforzar la infraestructura tecnológica, inspirada en buenas prácticas como el marco NIST.',
+      'Proyecto de tesis\n\nPlataforma web educativa desarrollada como proyecto de tesis, orientada a capacitar empleados en temas de ciberseguridad. La plataforma cuenta con módulos de aprendizaje, evaluaciones, sistema de progreso, certificados y elementos de gamificación como puntos y logros.\n\nMi rol se centró en el diseño de la estructura, la lógica de avance, las reglas de aprobación y la experiencia del usuario dentro de la plataforma.',
     image: 'project3',
     tags: ['React', 'Tailwind CSS', 'Firebase', 'JavaScript', 'HTML5', 'CSS', 'Framer Motion'],
-    liveUrl: '#',
+    liveUrl: 'https://proyecto-plataforma-ciberseguridad.vercel.app',
     githubUrl: '#',
   },
 ];
@@ -65,9 +65,9 @@ export const skills: Skill[] = [
 ] as const;
 
 export const socialLinks = {
-  github: '#',
+  github: 'https://github.com/Eduardo-2406',
   linkedin: '#',
-  whatsapp: '#',
+  whatsapp: 'https://wa.me/50432056298',
   cv: '/cv.pdf',
 } as const;
 

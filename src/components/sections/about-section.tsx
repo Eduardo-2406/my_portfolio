@@ -1,16 +1,22 @@
 "use client";
 
-import { ReactNode, useEffect, useState, useRef } from 'react';
-import { cubicBezier } from 'framer-motion';
-import { AnimatePresence, motion } from 'framer-motion';
-import { TypingAnimation } from '@/registry/magicui/typing-animation';
-import { SignatureEduardo } from '@/components/ui/signature-eduardo';
+import { ReactNode, useEffect, useState, useRef } from "react";
+import { cubicBezier } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { TypingAnimation } from "@/registry/magicui/typing-animation";
+import { SignatureEduardo } from "@/components/ui/signature-eduardo";
 
-import { useCallback, memo } from 'react';
+import { useCallback, memo } from "react";
 
-const AnimatedHeading = memo(function AnimatedHeading({ contentCanAnimate = true, shouldAnimate = true }: { contentCanAnimate?: boolean; shouldAnimate?: boolean }) {
+const AnimatedHeading = memo(function AnimatedHeading({
+  contentCanAnimate = true,
+  shouldAnimate = true,
+}: {
+  contentCanAnimate?: boolean;
+  shouldAnimate?: boolean;
+}) {
   const title = "Hey, Soy Eduardo";
-  const subtitle = "Desarrollador Frontend Jr.";
+  const subtitle = "Analista de Sistemas Jr. · QA Funcional";
   const [showTyping, setShowTyping] = useState(shouldAnimate);
 
   const handleTypingDone = useCallback(() => setShowTyping(false), []);
@@ -20,18 +26,24 @@ const AnimatedHeading = memo(function AnimatedHeading({ contentCanAnimate = true
       <h1 className="sr-only" aria-label={`${title} ${subtitle}`}>
         {title}
       </h1>
-      <div style={{ minHeight: '120px' }} className="flex items-center justify-center">
-        {contentCanAnimate && (
-          shouldAnimate ? (
+      <div
+        style={{ minHeight: "120px" }}
+        className="flex items-center justify-center"
+      >
+        {contentCanAnimate &&
+          (shouldAnimate ? (
             <SignatureEduardo startDelay={800} key="signature-animate" />
           ) : (
-            <SignatureEduardo startDelay={0} skipAnimation key="signature-static" />
-          )
-        )}
+            <SignatureEduardo
+              startDelay={0}
+              skipAnimation
+              key="signature-static"
+            />
+          ))}
       </div>
-      <div className="mt-1" style={{ minHeight: '3rem' }}>
+      <div className="mt-1" style={{ minHeight: "3rem" }}>
         <span
-          style={{ fontSize: 'clamp(1.25rem, 4vw, 2rem)' }}
+          style={{ fontSize: "clamp(1.25rem, 4vw, 2rem)" }}
           className="inline-block font-semibold text-foreground"
         >
           {showTyping && shouldAnimate ? (
@@ -63,7 +75,7 @@ type AboutSectionProps = {
   contentCanAnimate?: boolean;
 };
 
-const description = "Me gusta construir soluciones digitales que tengan sentido desde la base. Me interesa la etapa previa al código, ordenar ideas, definir la arquitectura, analizar pros y contras y pensar en soluciones claras antes de mover una sola línea. El objetivo es que lo que ves en pantalla se sienta fluido, útil y respaldado por una estructura sólida.";
+const description = "Me interesa la parte previa al desarrollo: entender el problema, ordenar ideas y definir cómo debería funcionar un sistema antes de escribir código. Suelo pensar en flujos, reglas y posibles errores desde la perspectiva del usuario, anticipándome a lo que puede fallar o generar confusión.\n\nHe trabajado en proyectos académicos y de práctica profesional donde participé en el análisis, la estructura y la lógica de sistemas completos. No me considero programador puro, pero sí alguien que disfruta diseñar soluciones claras, funcionales y bien pensadas desde la base.";
 
 const easeCurve = cubicBezier(0.22, 1, 0.36, 1);
 const headingMotion = {
@@ -77,7 +89,10 @@ const descriptionMotion = {
   transition: { duration: 0.8, delay: 4.5, ease: easeCurve },
 };
 
-export const AboutSection = memo(function AboutSection({ children, contentCanAnimate = true }: AboutSectionProps) {
+export const AboutSection = memo(function AboutSection({
+  children,
+  contentCanAnimate = true,
+}: AboutSectionProps) {
   const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -97,8 +112,8 @@ export const AboutSection = memo(function AboutSection({ children, contentCanAni
       className="w-full h-full min-h-dvh lg:min-h-0 flex flex-col items-center justify-center pb-10 sm:pb-12 md:pb-16 lg:pb-20 scroll-mt-16"
       aria-labelledby="about-heading"
     >
-      <motion.div 
-        className="w-full px-4 sm:px-8 md:px-12 lg:px-40 xl:px-40 2xl:px-40"
+      <motion.div
+        className="w-full px-4 sm:px-8 md:px-12 lg:px-32 xl:px-36 2xl:px-40"
         initial={{ opacity: 0 }}
         animate={{ opacity: contentCanAnimate ? 1 : 0 }}
         transition={{ duration: 0.01 }}
@@ -113,22 +128,26 @@ export const AboutSection = memo(function AboutSection({ children, contentCanAni
             animate={contentCanAnimate ? headingMotion.animate : { opacity: 0 }}
             transition={headingMotion.transition}
           >
-            <AnimatedHeading contentCanAnimate={contentCanAnimate} shouldAnimate={shouldAnimate} />
+            <AnimatedHeading
+              contentCanAnimate={contentCanAnimate}
+              shouldAnimate={shouldAnimate}
+            />
           </motion.div>
-          <motion.div style={{ overflow: 'hidden' }} className="max-w-2xl mx-auto">
-            <motion.p
-              className="text-foreground/85 leading-loose"
-              style={{ fontSize: 'clamp(1rem, 2.2vw, 1.25rem)' }}
-              initial={descriptionMotion.initial}
-              animate={contentCanAnimate ? descriptionMotion.animate : descriptionMotion.initial}
-              transition={descriptionMotion.transition}
-            >
-              {description}
-            </motion.p>
+          <motion.div style={{ overflow: 'hidden' }} className="max-w-3xl mx-auto space-y-4">
+            {description.split('\n\n').map((paragraph, index) => (
+              <motion.p
+                key={index}
+                className="text-foreground/85 leading-loose"
+                style={{ fontSize: 'clamp(1rem, 2.2vw, 1.25rem)' }}
+                initial={descriptionMotion.initial}
+                animate={contentCanAnimate ? descriptionMotion.animate : descriptionMotion.initial}
+                transition={descriptionMotion.transition}
+              >
+                {paragraph}
+              </motion.p>
+            ))}
           </motion.div>
-          <AnimatePresence>
-            {children}
-          </AnimatePresence>
+          <AnimatePresence>{children}</AnimatePresence>
         </motion.div>
       </motion.div>
     </section>

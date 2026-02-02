@@ -172,15 +172,27 @@ const MobileProjectCard = React.memo(function MobileProjectCard({ project, baseD
       </CardContent>
 
       <CardFooter className="pt-2 justify-end">
-        {isMobileTablet ? (
-          <motion.div
-            whileInView={{ y: 0, opacity: 1 }}
-            initial={{ y: 16, opacity: 0 }}
-            viewport={{ once: true, amount: 0.35 }}
-            transition={{ duration: 0.45, ease, delay: baseDelay + 0.22 }}
-            whileHover={{ y: -4, scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
+        {/* Ocultar botón Ver Demo para Cafetería Web */}
+        {project.id !== 'proj2' && (
+          isMobileTablet ? (
+            <motion.div
+              whileInView={{ y: 0, opacity: 1 }}
+              initial={{ y: 16, opacity: 0 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ duration: 0.45, ease, delay: baseDelay + 0.22 }}
+              whileHover={{ y: -4, scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <CtaButton
+                className="text-primary"
+                onClick={() => {
+                  window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
+                }}
+              >
+                Ver Demo
+              </CtaButton>
+            </motion.div>
+          ) : (
             <CtaButton
               className="text-primary"
               onClick={() => {
@@ -189,16 +201,7 @@ const MobileProjectCard = React.memo(function MobileProjectCard({ project, baseD
             >
               Ver Demo
             </CtaButton>
-          </motion.div>
-        ) : (
-          <CtaButton
-            className="text-primary"
-            onClick={() => {
-              window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
-            }}
-          >
-            Ver Demo
-          </CtaButton>
+          )
         )}
       </CardFooter>
     </Card>
@@ -352,17 +355,19 @@ const SplitViewCard = React.memo(function SplitViewCard({
             </motion.p>
           </motion.div>
 
-          {/* Botón CTA */}
-          <motion.div className="pt-4" variants={textLeftVariants}>
-            <CtaButton
-              className="text-primary text-base"
-              onClick={() => {
-                window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
-              }}
-            >
-              Ver Demo
-            </CtaButton>
-          </motion.div>
+          {/* Botón CTA - Ocultar para Cafetería Web */}
+          {project.id !== 'proj2' && (
+            <motion.div className="pt-4" variants={textLeftVariants}>
+              <CtaButton
+                className="text-primary text-base"
+                onClick={() => {
+                  window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
+                }}
+              >
+                Ver Demo
+              </CtaButton>
+            </motion.div>
+          )}
         </motion.div>
       </div>
     </motion.div>

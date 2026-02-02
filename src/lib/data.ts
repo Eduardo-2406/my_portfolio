@@ -22,7 +22,7 @@ export const projects: Project[] = [
     description:
       'Proyecto académico de práctica profesional\n\nSistema de inventario general desarrollado como práctica profesional, enfocado en digitalizar procesos que antes se manejaban en Excel. El sistema permite gestionar materiales, equipos, mobiliario, eventos y viajes desde una sola plataforma, con distintos niveles de acceso según el usuario.\n\nMi participación estuvo centrada en el análisis del funcionamiento interno, la definición de flujos, reglas de negocio y la lógica general del sistema.',
     image: 'project1',
-    tags: ['C#', 'SQL Server'],
+    tags: ['React', 'Vite', 'JavaScript', 'PostgreSQL', 'Framer Motion', 'CSS', 'HTML5'],
     liveUrl: 'https://inventario-web-kh.vercel.app/#/login',
     githubUrl: '#',
   },
@@ -32,7 +32,7 @@ export const projects: Project[] = [
     description:
       'Proyecto académico\n\nSistema web para la gestión de pedidos y facturación de una cafetería. Los clientes pueden realizar pedidos en línea y recibir su factura en PDF por correo electrónico, mientras el personal administra y actualiza el estado de los pedidos desde un panel centralizado.\n\nEl proyecto se enfocó en definir flujos claros, validaciones y una experiencia sencilla tanto para clientes como para empleados.',
     image: 'project2',
-    tags: ['PHP', 'Sass', 'JavaScript', 'MySQL'],
+    tags: ['PHP', 'Sass', 'MySQL'],
     liveUrl: '#',
     githubUrl: '#',
   },

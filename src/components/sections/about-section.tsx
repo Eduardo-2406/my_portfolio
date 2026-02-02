@@ -16,7 +16,7 @@ const AnimatedHeading = memo(function AnimatedHeading({
   shouldAnimate?: boolean;
 }) {
   const title = "Hey, Soy Eduardo";
-  const subtitle = "Analista de Sistemas Jr. · QA Funcional";
+  const subtitle = "Analista de Sistemas Jr. - QA Funcional";
   const [showTyping, setShowTyping] = useState(shouldAnimate);
 
   const handleTypingDone = useCallback(() => setShowTyping(false), []);

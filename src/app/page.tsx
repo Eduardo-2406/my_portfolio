@@ -57,7 +57,7 @@ const SECTIONS = [
   { id: 'contact', component: ContactSection },
 ] as const;
 
-const SOCIAL_PLATFORMS: SocialPlatform[] = ['github', 'linkedin', 'whatsapp', 'cv'];
+const SOCIAL_PLATFORMS: SocialPlatform[] = ['github', 'whatsapp', 'cv'];
 
 const LOADER_SPANS_COUNT = 15;
 

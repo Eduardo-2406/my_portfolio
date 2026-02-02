@@ -70,36 +70,41 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         <div className="error-page-root" role="alert">
           <div className="error-page">
             <div>
-              <h1 data-h1="404">404</h1>
-              <p data-p="NOT FOUND">NOT FOUND</p>
+              <h1 data-h1="ERROR">ERROR</h1>
+              <p data-p="ALGO SALIÓ MAL">ALGO SALIÓ MAL</p>
             </div>
             <div id="particles-js" aria-hidden="true" />
-            <a
+            <button
               className="back"
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (typeof window !== 'undefined' && window.history.length > 1) window.history.back();
+              type="button"
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  if (window.history.length > 1) {
+                    window.history.back();
+                  } else {
+                    window.location.href = '/';
+                  }
+                }
               }}
             >
-              GO BACK
-            </a>
+              VOLVER
+            </button>
           </div>
 
           <style jsx global>{`
             html, body { height: 100%; }
-            .error-page-root { height: 100vh; overflow: hidden; }
-            .error-page { display:flex; align-items:center; justify-content:center; text-align:center; height:100%; font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif; position:relative; }
+            .error-page-root { height: 100vh; overflow: hidden; background: hsl(222 19% 6%); }
+            .error-page { display:flex; align-items:center; justify-content:center; text-align:center; height:100%; font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif; position:relative; flex-direction:column; gap:2rem; }
             .error-page > div { z-index: 2 }
-            .error-page h1 { font-size: 30vh; font-weight:700; position:relative; margin:-8vh 0 0; padding:0; }
-            .error-page h1:after { content: attr(data-h1); position:absolute; top:0; left:0; right:0; color:transparent; background: linear-gradient(-45deg,#71b7e6,#69a6ce,#b98acc,#ee8176,#b98acc,#69a6ce,#9b59b6); background-size:400%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation: eb-animateTextBackground 10s ease-in-out infinite; }
-            .error-page p { color:#d6d6d6; font-size:8vh; font-weight:700; line-height:10vh; max-width:600px; position:relative; margin-top:0.5rem }
+            .error-page h1 { font-size: 20vh; font-weight:700; position:relative; margin:-8vh 0 0; padding:0; color: hsl(210 6% 79%); }
+            .error-page h1:after { content: attr(data-h1); position:absolute; top:0; left:0; right:0; color:transparent; background: linear-gradient(-45deg, #599692, #6bb3ae, #4a7d79, #599692, #7cc4bf, #4a7d79); background-size:400%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation: eb-animateTextBackground 10s ease-in-out infinite; }
+            .error-page p { color: hsl(210 6% 79%); font-size:5vh; font-weight:600; line-height:7vh; max-width:600px; position:relative; margin-top:0.5rem }
             .error-page p:after { content: attr(data-p); position:absolute; top:0; left:0; right:0; color:transparent; background:transparent; -webkit-background-clip:text; background-clip:text }
             #particles-js { position:fixed; top:0; right:0; bottom:0; left:0; z-index:1 }
             @keyframes eb-animateTextBackground { 0%{background-position:0 0}25%{background-position:100% 0}50%{background-position:100% 100%}75%{background-position:0 100%}100%{background-position:0 0} }
-            @media (max-width:767px) { .error-page h1{ font-size:32vw } .error-page p{ font-size:8vw; line-height:10vw; max-width:70vw } }
-            .back { position: fixed; right:40px; bottom:40px; background: linear-gradient(-45deg,#71b7e6,#69a6ce,#b98acc,#ee8176); border-radius:5px; box-shadow:0 2px 10px rgba(0,0,0,0.2); color:#fff; font-size:16px; font-weight:700; line-height:24px; padding:15px 30px; text-decoration:none; transition:0.25s all ease-in-out; z-index:3 }
-            .back:hover { box-shadow:0 4px 20px rgba(0,0,0,0.4) }
+            @media (max-width:767px) { .error-page h1{ font-size:18vw } .error-page p{ font-size:5vw; line-height:7vw; max-width:70vw } }
+            .back { position: fixed; right:40px; bottom:40px; background: hsl(174 25% 48%); border:none; border-radius:8px; box-shadow:0 2px 10px rgba(89,150,146,0.3); color: hsl(222 19% 6%); font-size:16px; font-weight:700; line-height:24px; padding:15px 30px; text-decoration:none; transition:0.25s all ease-in-out; z-index:3; cursor:pointer; }
+            .back:hover { background: hsl(174 25% 55%); box-shadow:0 4px 20px rgba(89,150,146,0.5); transform: translateY(-2px); }
           `}</style>
         </div>
       );

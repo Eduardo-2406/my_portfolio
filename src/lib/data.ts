@@ -23,7 +23,7 @@ export const projects: Project[] = [
       'Proyecto académico de práctica profesional\n\nSistema de inventario general desarrollado como práctica profesional, enfocado en digitalizar procesos que antes se manejaban en Excel. El sistema permite gestionar materiales, equipos, mobiliario, eventos y viajes desde una sola plataforma, con distintos niveles de acceso según el usuario.\n\nMi participación estuvo centrada en el análisis del funcionamiento interno, la definición de flujos, reglas de negocio y la lógica general del sistema.',
     image: 'project1',
     tags: ['C#', 'SQL Server'],
-    liveUrl: '#',
+    liveUrl: 'https://inventario-web-kh.vercel.app/#/login',
     githubUrl: '#',
   },
   {
@@ -66,7 +66,6 @@ export const skills: Skill[] = [
 
 export const socialLinks = {
   github: 'https://github.com/Eduardo-2406',
-  linkedin: '#',
   whatsapp: 'https://wa.me/50432056298',
   cv: '/cv.pdf',
 } as const;
